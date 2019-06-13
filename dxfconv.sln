@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dxfconv", "dxfconv.vcxproj", "{40FCDE22-38D9-43BC-9010-51F0ACD8F406}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40FCDE22-38D9-43BC-9010-51F0ACD8F406}.Debug|Win32.ActiveCfg = Debug|Win32
+		{40FCDE22-38D9-43BC-9010-51F0ACD8F406}.Debug|Win32.Build.0 = Debug|Win32
+		{40FCDE22-38D9-43BC-9010-51F0ACD8F406}.Release|Win32.ActiveCfg = Release|Win32
+		{40FCDE22-38D9-43BC-9010-51F0ACD8F406}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{40FCDE22-38D9-43BC-9010-51F0ACD8F406}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>dxfconv</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\</OutDir>
+    <TargetName>dxfconv</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;WNT;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.\;$(CASROOT69)\inc</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <StringPooling>false</StringPooling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AssemblerListingLocation>.\vc_msw\</AssemblerListingLocation>
+      <ObjectFileName>.\vc_msw\</ObjectFileName>
+      <ProgramDataBaseFileName>.\vc_msw\dxfconv.pdb</ProgramDataBaseFileName>
+      <BrowseInformationFile />
+      <DebugInformationFormat>None</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <OutputFile>..\dxfconv.exe</OutputFile>
+      <AdditionalLibraryDirectories>$(CASROOT69)\win32\vc12\lib</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>.\vc_msw\dxfconv.pdb</ProgramDatabaseFile>
+      <LinkTimeCodeGeneration />
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <AdditionalDependencies>TKVrml.lib;TKStl.lib;TKBRep.lib;TKIGES.lib;TKShHealing.lib;TKSTEP.lib;TKSTEP209.lib;TKSTEPAttr.lib;TKSTEPBase.lib;TKXSBase.lib;TKShapeSchema.lib;FWOSPlugin.lib;PTKernel.lib;TKBool.lib;TKCAF.lib;TKCDF.lib;TKernel.lib;TKFeat.lib;TKFillet.lib;TKG2d.lib;TKG3d.lib;TKGeomAlgo.lib;TKGeomBase.lib;TKHLR.lib;TKMath.lib;TKOffset.lib;TKPCAF.lib;TKPrim.lib;TKPShape.lib;TKService.lib;TKTopAlgo.lib;TKV3d.lib;TKMesh.lib;TKBO.lib;TKXDESTEP.lib;TKXCAF.lib;TKXCAFSchema.lib;TKLCAF.lib;TKPLCAF.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Bscmake>
+      <OutputFile />
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h" />
+    <ClInclude Include="Box.h" />
+    <ClInclude Include="dxf.h" />
+    <ClInclude Include="EndedObject.h" />
+    <ClInclude Include="ExtrudedObj.h" />
+    <ClInclude Include="Geom.h" />
+    <ClInclude Include="HArc.h" />
+    <ClInclude Include="HCircle.h" />
+    <ClInclude Include="HDxf.h" />
+    <ClInclude Include="HeeksColor.h" />
+    <ClInclude Include="HeeksObj.h" />
+    <ClInclude Include="HEllipse.h" />
+    <ClInclude Include="HILine.h" />
+    <ClInclude Include="HLine.h" />
+    <ClInclude Include="HPoint.h" />
+    <ClInclude Include="HSpline.h" />
+    <ClInclude Include="HText.h" />
+    <ClInclude Include="IdNamedObj.h" />
+    <ClInclude Include="IdNamedObjList.h" />
+    <ClInclude Include="ObjList.h" />
+    <ClInclude Include="Sketch.h" />
+    <ClInclude Include="SketchOrder.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="strconv.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="dxf.cpp" />
+    <ClCompile Include="dxfconv.cpp" />
+    <ClCompile Include="EndedObject.cpp" />
+    <ClCompile Include="ExtrudedObj.cpp" />
+    <ClCompile Include="Geom.cpp" />
+    <ClCompile Include="HArc.cpp" />
+    <ClCompile Include="HCircle.cpp" />
+    <ClCompile Include="HDxf.cpp" />
+    <ClCompile Include="HeeksColor.cpp" />
+    <ClCompile Include="HeeksObj.cpp" />
+    <ClCompile Include="HEllipse.cpp" />
+    <ClCompile Include="HILine.cpp" />
+    <ClCompile Include="HLine.cpp" />
+    <ClCompile Include="HPoint.cpp" />
+    <ClCompile Include="HSpline.cpp" />
+    <ClCompile Include="HText.cpp" />
+    <ClCompile Include="IdNamedObj.cpp" />
+    <ClCompile Include="IdNamedObjList.cpp" />
+    <ClCompile Include="ObjList.cpp" />
+    <ClCompile Include="Sketch.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="strconv.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
