@@ -29,7 +29,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	DoConvert(input_filepath.c_str(), output_filepath.c_str());
 
-	return 1;
+	return 0;
 }
 
 
