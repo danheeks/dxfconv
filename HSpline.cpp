@@ -258,8 +258,11 @@ int HSpline::Intersects(const HeeksObj *object, std::list< double > *rl)const
 
 static bool calculate_biarc_points(const gp_Pnt &p0, gp_Vec v_start, const gp_Pnt &p4, gp_Vec v_end, gp_Pnt &p1, gp_Pnt &p2, gp_Pnt &p3)
 {
-	if(v_start.Magnitude() < 0.0000000001)v_start = gp_Vec(p0, p1);
-    if(v_end.Magnitude() < 0.0000000001)v_end = gp_Vec(p3, p4);
+//	if(v_start.Magnitude() < 0.0000000001)v_start = gp_Vec(p0, p4);
+//    if(v_end.Magnitude() < 0.0000000001)v_end = gp_Vec(p0, p4);
+
+	if (v_start.Magnitude() < 0.0000000001)return true;
+	if (v_end.Magnitude() < 0.0000000001)return true;
 
 	v_start.Normalize();
 	v_end.Normalize();
@@ -299,9 +302,20 @@ static std::list<HeeksObj*>* new_spans_for_CreateArcs = NULL;
 static double tolerance_for_CreateArcs = 1.0;
 static Handle(Geom_BSplineCurve) spline_for_CreateArcs = NULL;
 
-void CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, double t_end, gp_Pnt &p_end, gp_Vec &v_end)
+static void GetSplinePointAndVector(const Handle_Geom_BSplineCurve s, double parameter, gp_Pnt& point, gp_Vec& vector)
 {
-	spline_for_CreateArcs->D1(t_end, p_end, v_end);
+	s->D1(parameter, point, vector);
+	if (vector.Magnitude() < 0.0000001)
+	{
+		gp_Pnt point2;
+		s->D0(parameter + 0.01, point2);
+		vector = gp_Vec(point, point2);
+	}
+}
+
+void CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, double t_end, gp_Pnt &p_end, gp_Vec &v_end, int level = 0)
+{
+	GetSplinePointAndVector(spline_for_CreateArcs, t_end, p_end, v_end);
 
 	gp_Pnt p1, p2, p3;
 
@@ -327,7 +341,7 @@ void CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, do
 			arc_object2 = arc2.MakeHArc();
 		}
 	}
-	else
+	else if(level > 0)
 	{
 		// calculate_biarc_points failed, just add a line
 		new_spans_for_CreateArcs->push_back(new HLine(p_start, p_end, &(theApp.current_color)));
@@ -344,10 +358,10 @@ void CreateArcs(const gp_Pnt &p_start, const gp_Vec &v_start, double t_start, do
 		double t_middle = t_start + ((t_end - t_start) * 0.5);
 		gp_Pnt p_middle;
 		gp_Vec v_middle;
-		CreateArcs(p_start, v_start, t_start, t_middle, p_middle, v_middle);// recursive
+		CreateArcs(p_start, v_start, t_start, t_middle, p_middle, v_middle, level + 1);// recursive
 		gp_Pnt new_p_end;
 		gp_Vec new_v_end;
-		CreateArcs(p_middle, v_middle, t_middle, t_end, new_p_end, new_v_end);
+		CreateArcs(p_middle, v_middle, t_middle, t_end, new_p_end, new_v_end, level + 1);
 	}
 }
 
@@ -376,7 +390,7 @@ void HSpline::ToBiarcs(const Handle_Geom_BSplineCurve s, std::list<HeeksObj*> &n
 	gp_Vec v_start;
 	gp_Pnt p_end;
 	gp_Vec v_end;
-	s->D1(first_parameter, p_start, v_start);
+	GetSplinePointAndVector(s, first_parameter, p_start, v_start);
 	spline_for_CreateArcs = s;
 	CreateArcs(p_start, v_start, first_parameter, last_parameter, p_end, v_end);
 }

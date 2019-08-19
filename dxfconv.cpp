@@ -10,7 +10,7 @@ void DoConvert(const wchar_t* in_filepath, const wchar_t* out_filepath)
 	HeeksDxfRead dxf_file(in_filepath);
 	dxf_file.DoRead(HeeksDxfRead::m_ignore_errors);
 
-	theApp.SplinesToBiarcs(0.0001);
+	theApp.SplinesToBiarcs(0.01);
 
 	theApp.SaveDXFFile(theApp.GetChildren(), out_filepath);
 }

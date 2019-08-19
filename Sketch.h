@@ -30,7 +30,6 @@ public:
 
 	bool IsDifferent( HeeksObj *other ) { return(*this != (*(CSketch *)other)); }
 
-	std::vector<TopoDS_Face> GetFaces();
 	int GetType()const{return SketchType;}
 	long GetMarkingMask()const{return MARKING_FILTER_SKETCH;}
 	const wchar_t* GetTypeString(void)const{return L"Sketch";}
@@ -50,7 +49,6 @@ public:
 	void ExtractSeparateSketches(std::list<HeeksObj*> &new_separate_sketches, const bool allow_individual_objects = false);
 	int Intersects(const HeeksObj *object, std::list< double > *rl) const;
 	HeeksObj *Parallel( const double distance );
-	bool FilletAtPoint(const gp_Pnt& p, double rad);
 	static void ReverseObject(HeeksObj* object);
 	double GetArea()const;
 	CSketch* SplineToBiarcs(double tolerance)const;

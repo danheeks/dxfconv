@@ -534,6 +534,8 @@ bool CDxfRead::ReadArc()
 	return false;
 }
 
+static bool no_more_splines_please = false;
+
 bool CDxfRead::ReadSpline()
 {
 	struct SplineData sd;
@@ -562,7 +564,7 @@ bool CDxfRead::ReadSpline()
 		switch(n){
 			case 0:
 				// next item found, so finish with Spline
-			        DerefACI();
+				DerefACI();
 				OnReadSpline(sd);
 				return true;
 			case 8: // Layer name follows
@@ -711,7 +713,7 @@ bool CDxfRead::ReadSpline()
 		}
 	}
 	DerefACI();
-	OnReadSpline(sd);
+//	OnReadSpline(sd);
 	return false;
 }
 
@@ -2717,11 +2719,12 @@ void CDxfRead::DoRead(const bool ignore_errors /* = false */ )
 				continue;
 			}
 			else if(!strcmp(m_str, "SPLINE")){
-				if(!ReadSpline())
+				if (!ReadSpline())
 				{
 					printf("CDxfRead::DoRead() Failed to read spline\n");
 					return;
 				}
+
 				continue;
 			}
 			else if (!strcmp(m_str, "LWPOLYLINE")) {

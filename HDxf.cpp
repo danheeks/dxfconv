@@ -148,12 +148,16 @@ void HeeksDxfRead::OnReadCircle(const double* s, const double* c, bool dir, bool
 void HeeksDxfRead::OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot, TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational)
 {
 	try{
-		Geom_BSplineCurve spline(control, weight, knot, mult, degree, periodic, rational);
+		Geom_BSplineCurve spline(control, weight, knot, mult, degree, false, rational);
+		if (periodic)spline.SetPeriodic();
 		HSpline* new_object = new HSpline(spline, ActiveColorPtr(m_aci));
 		AddObject(new_object);
 	}
-	catch (Standard_Failure)
+
+	catch (Standard_Failure &err)
 	{
+		Standard_Failure::Caught();
+		cout << "Error creating spline curve: " << err.GetMessageString();
 		if (!IgnoreErrors()) throw;	// Re-throw the exception.
 	}
 }
@@ -177,17 +181,55 @@ void HeeksDxfRead::OnReadSpline(struct SplineData& sd)
 		//sd_copy.controlx
 	}
 
-	TColgp_Array1OfPnt control(1,/*closed ? sd.controlx.size() + 1:*/sd.controlx.size());
-	TColStd_Array1OfReal weight(1, sd.controlx.size());
-
 	std::list<double> knoto;
 	std::list<int> multo;
+
+	unsigned int i;
+	i = 1;
+	double last_knot = -1;
+	for (std::list<double>::iterator it = sd.knot.begin(); it != sd.knot.end(); ++it)
+	{
+		if (*it != last_knot)
+		{
+			knoto.push_back(*it);
+			multo.push_back(1);
+			i++;
+		}
+		else
+		{
+			multo.back() += 1;
+		}
+		last_knot = *it;
+	}
+
+	TColStd_Array1OfReal knot(1, knoto.size());
+	TColStd_Array1OfInteger mult(1, knoto.size());
+
+	std::list<int>::iterator itm = multo.begin();
+	i = 1;
+	for (std::list<double>::iterator it = knoto.begin(); it != knoto.end(); ++it)
+	{
+		knot.SetValue(i, *it);
+		int m = *itm;
+		//if (closed)
+		//{
+			//if (i == 1 || i == knoto.size())m = 2;
+			//else m = 1;
+		//}
+		mult.SetValue(i, m);
+		++itm;
+		++i;
+	}
+
+
+	TColgp_Array1OfPnt control(1,/*closed ? sd.controlx.size() + 1:*/sd.controlx.size());
+	TColStd_Array1OfReal weight(1, sd.controlx.size());
 
 	std::list<double>::iterator ity = sd.controly.begin();
 	std::list<double>::iterator itz = sd.controlz.begin();
 	std::list<double>::iterator itw = sd.weight.begin();
 
-	unsigned i = 1; //int i=1;
+	i = 1; //int i=1;
 	for (std::list<double>::iterator itx = sd.controlx.begin(); itx != sd.controlx.end(); ++itx)
 	{
 		gp_Pnt pnt(*itx, *ity, *itz);
@@ -204,40 +246,8 @@ void HeeksDxfRead::OnReadSpline(struct SplineData& sd)
 		++itz;
 	}
 
-	i = 1;
-	double last_knot = -1;
-	for (std::list<double>::iterator it = sd.knot.begin(); it != sd.knot.end(); ++it)
-	{
-		if (*it != last_knot)
-		{
-			knoto.push_back(*it);
-			multo.push_back(1);
-			i++;
-		}
-		else
-		{
-			int temp = multo.back();
-			multo.pop_back();
-			multo.push_back(temp + 1);
-		}
-		last_knot = *it;
-	}
-
-	TColStd_Array1OfReal knot(1, knoto.size());
-	TColStd_Array1OfInteger mult(1, knoto.size());
-
-	std::list<int>::iterator itm = multo.begin();
-	i = 1;
-	for (std::list<double>::iterator it = knoto.begin(); it != knoto.end(); ++it)
-	{
-		knot.SetValue(i, *it);
-		int m = *itm;
-		if (closed && (i == 1 || i == knoto.size()))m = 1;
-		mult.SetValue(i, m);
-		++itm;
-		++i;
-	}
-
+	bool dont = false;
+	if(!dont)
 	OnReadSpline(control, weight, knot, mult, sd.degree, periodic, rational);
 }
 

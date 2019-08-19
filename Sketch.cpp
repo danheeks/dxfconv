@@ -506,37 +506,7 @@ bool CSketch::operator==( const CSketch & rhs ) const
 	return(IdNamedObjList::operator==(rhs));
 }
 
-static bool FindClosestVertex(const gp_Pnt& p, const TopoDS_Face &face, TopoDS_Vertex &closest_vertex)
-{
-	// find closest vertex
-	TopExp_Explorer ex1;
-	double best_dist = -1;
-
-	for(ex1.Init(face,TopAbs_VERTEX); ex1.More(); ex1.Next())
-	{
-		TopoDS_Vertex Vertex =TopoDS::Vertex(ex1.Current());
-		gp_Pnt pos = BRep_Tool::Pnt(Vertex);
-		double d = pos.Distance(p);
-		if(best_dist < 0 || d < best_dist)
-		{
-			best_dist = d;
-			closest_vertex = Vertex;
-		}
-	}
-
-	return best_dist > -0.1;
-}
-
 #undef Status
-
-bool CSketch::FilletAtPoint(const gp_Pnt& p, double rad)
-{
-	std::list<TopoDS_Shape> faces;
-	bool fillet_done = false;
-
-
-	return fillet_done;
-}
 
 CSketch* CSketch::SplineToBiarcs(double tolerance)const
 {
