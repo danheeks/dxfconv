@@ -113,11 +113,15 @@
 //#include <STEPControl_Reader.hxx>
 //#include <STEPControl_Writer.hxx>
 //#include <TColgp_Array1OfDir.hxx>
-//#include <TColgp_Array1OfPnt.hxx>
+#if OCC_VERSION_HEX < 0x070000
+#include <TColgp_Array1OfPnt.hxx>
+#endif
 //#include <TColgp_Array2OfPnt.hxx>
-//#include <TColgp_HArray1OfPnt.hxx>
-//#include <TColStd_Array1OfInteger.hxx>
-//#include <TColStd_Array1OfReal.hxx>
+#if OCC_VERSION_HEX < 0x070000
+#include <TColgp_HArray1OfPnt.hxx>
+#include <TColStd_Array1OfInteger.hxx>
+#include <TColStd_Array1OfReal.hxx>
+#endif
 //#include <TopExp.hxx>
 //#include <TopExp_Explorer.hxx>
 //#include <TopoDS.hxx>

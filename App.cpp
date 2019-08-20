@@ -19,6 +19,24 @@ CApp::CApp() :ObjList()
 	current_color = HeeksColor(0, 0, 0);
 }
 
+static bool segment_started = false;
+static double segment_p[3];
+CDxfWrite* segment_dxf_file = NULL;
+std::wstring segment_layer_name;
+double segment_thickness = 0.0;
+double segment_extrusion_vector[3] = { 0.0, 0.0, 0.0 };
+
+static void WriteSegmentLines(const double* p)
+{
+	if (segment_started)
+	{
+		segment_dxf_file->WriteLine(segment_p, p, ws2s(segment_layer_name).c_str(), segment_thickness, segment_extrusion_vector);
+	}
+	segment_p[0] = p[0];
+	segment_p[1] = p[1];
+	segment_p[2] = p[2];
+	segment_started = true;
+}
 
 static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const std::wstring parent_layer_name)
 {
@@ -62,7 +80,22 @@ static void WriteDXFEntity(HeeksObj* object, CDxfWrite& dxf_file, const std::wst
 		extract(a->B, e);
 		extract(a->C, c);
 		bool dir = a->m_axis.Direction().Z() > 0;
-		dxf_file.WriteArc(s, e, c, dir, ws2s(layer_name).c_str(), a->m_thickness, a->m_extrusion_vector);
+
+		if (a->m_radius > 1000.0)
+		{
+			segment_started = false;
+			segment_dxf_file = &dxf_file;
+			segment_layer_name = layer_name;
+			segment_thickness = a->m_thickness;
+			segment_extrusion_vector[0] = a->m_extrusion_vector[0];
+			segment_extrusion_vector[1] = a->m_extrusion_vector[1];
+			segment_extrusion_vector[2] = a->m_extrusion_vector[2];
+			a->GetSegments(WriteSegmentLines, 0.001);
+		}
+		else
+		{
+			dxf_file.WriteArc(s, e, c, dir, ws2s(layer_name).c_str(), a->m_thickness, a->m_extrusion_vector);
+		}
 	}
 	break;
 	case EllipseType:

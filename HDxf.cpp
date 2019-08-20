@@ -59,13 +59,25 @@ void HeeksDxfRead::OnReadBlock(const char* block_name, const double* base_point)
 
 void HeeksDxfRead::OnReadInsert(const char* block_name, const double* insert_point, double rotation_angle)
 {
-	if (m_blocks.find(std::wstring(s2ws(block_name))) == m_blocks.end())
+	CInsertData insert_data;
+	insert_data.insert_into_sketch = m_current_block;
+	insert_data.blockname = std::wstring(s2ws(block_name));
+	insert_data.insert_point[0] = insert_point[0];
+	insert_data.insert_point[1] = insert_point[1];
+	insert_data.insert_point[2] = insert_point[2];
+	insert_data.rotation_angle = rotation_angle;
+	blocks_to_insert.push_back(insert_data);
+}
+
+void HeeksDxfRead::OnReadInsert2(CInsertData &insert_data)
+{
+	if (m_blocks.find(insert_data.blockname) == m_blocks.end())
 	{
 		return; // block not foundblock_name, const double* insert_point, double rotation_angle
 	}
 	else
 	{
-		BlockName_t b_name = std::wstring(s2ws(block_name));
+		BlockName_t b_name = insert_data.blockname;
 #if 0
 		// insert an insert object. To be expanded at the end
 		HInsert* new_object = new HInsert(block_name, insert_point, rotation_angle);
@@ -74,13 +86,17 @@ void HeeksDxfRead::OnReadInsert(const char* block_name, const double* insert_poi
 		CSketch* block = m_blocks[b_name];
 		CSketch* block_copy = new CSketch(*block);
 		gp_Trsf tm;
-		tm.SetTranslationPart(make_vector(insert_point));
+		tm.SetTranslationPart(make_vector(insert_data.insert_point));
 		gp_Trsf rm;
-		rm.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), rotation_angle * 0.01745329251994329);
+		rm.SetRotation(gp_Ax1(gp_Pnt(0, 0, 0), gp_Dir(0, 0, 1)), insert_data.rotation_angle * 0.01745329251994329);
 		double m[16];
 		extract(tm * rm, m);
 		block_copy->ModifyByMatrix(m);
+
+		CSketch* save_current_block = m_current_block;
+		m_current_block = insert_data.insert_into_sketch;
 		AddObject(block_copy);
+		m_current_block = save_current_block;
 #endif
 		inserted_blocks.insert(b_name);
 	}
@@ -468,6 +484,12 @@ void HeeksDxfRead::AddObject(HeeksObj *object)
 
 void HeeksDxfRead::AddGraphics()
 {
+	for (std::list< CInsertData >::iterator It = blocks_to_insert.begin(); It != blocks_to_insert.end(); It++)
+	{
+		CInsertData & insert_data = *It;
+		this->OnReadInsert2(insert_data);
+	}
+
 	// add one insert of any blocks which haven't been added at all
 	m_current_block = NULL;
 	if (HeeksDxfRead::m_add_uninstanced_blocks)

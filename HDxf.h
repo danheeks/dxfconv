@@ -5,6 +5,18 @@
 #include "dxf.h"
 
 
+typedef std::wstring BlockName_t;
+class CInsertData
+{
+public:
+	// insert the inserts after all the blocks have been made
+	CSketch * insert_into_sketch;
+	BlockName_t blockname;
+	double insert_point[3];
+	double rotation_angle;
+};
+
+
 // Make a default CDxfRead, make a CDxfConverter passing the CDxfRead pointer to it, then call DoRead on the CDxfConverter
 
 class HeeksDxfRead : public CDxfRead{
@@ -12,12 +24,12 @@ class HeeksDxfRead : public CDxfRead{
 		typedef std::wstring LayerName_t;
 		typedef std::map< LayerName_t, CSketch * > Sketches_t;
 		Sketches_t m_sketches;
-		typedef std::wstring BlockName_t;
 		typedef std::map< BlockName_t, CSketch * > Blocks_t;
 		Blocks_t m_blocks;
 		std::set<BlockName_t> inserted_blocks;
 		CSketch* m_current_block;
 		double m_ucs_matrix[16];
+		std::list< CInsertData > blocks_to_insert;
 
 		HeeksColor DecodeACI(const int aci);
 		void OnReadSpline(TColgp_Array1OfPnt &control, TColStd_Array1OfReal &weight, TColStd_Array1OfReal &knot, TColStd_Array1OfInteger &mult, int degree, bool periodic, bool rational);
@@ -51,4 +63,5 @@ public:
 
 		void AddObject(HeeksObj *object);
 		void AddGraphics();
+		void OnReadInsert2(CInsertData &insert_data);
 	};

@@ -21,6 +21,7 @@ CDxfWrite::CDxfWrite(const char* filepath)
 		return;
 	}
 	m_ofs->imbue(std::locale("C"));
+	m_ofs->precision(12);
 
 	// start
 	(*m_ofs) << 0          << endl;

@@ -7,6 +7,7 @@
 #include "HLine.h"
 #include "HILine.h"
 #include "HArc.h"
+#include "Area.h"
 
 CTangentialArc::CTangentialArc(const gp_Pnt &p0, const gp_Vec &v0, const gp_Pnt &p1):m_p0(p0), m_v0(v0), m_p1(p1)
 {
@@ -386,13 +387,49 @@ void HSpline::ToBiarcs(const Handle_Geom_BSplineCurve s, std::list<HeeksObj*> &n
 	new_spans_for_CreateArcs = &new_spans;
 	if(tolerance < 0.000000000000001)tolerance = 0.000000000000001;
 	tolerance_for_CreateArcs = tolerance;
-	gp_Pnt p_start;
-	gp_Vec v_start;
-	gp_Pnt p_end;
-	gp_Vec v_end;
-	GetSplinePointAndVector(s, first_parameter, p_start, v_start);
-	spline_for_CreateArcs = s;
-	CreateArcs(p_start, v_start, first_parameter, last_parameter, p_end, v_end);
+
+	CCurve curve;
+
+	// split into 1000 lines
+
+	for (unsigned int i = 0; i <= 1000; i++)
+	{
+		gp_Pnt p;
+		s->D0(first_parameter + (last_parameter - first_parameter) * i * 0.001, p);
+		curve.append(Point(p.X(), p.Y()));
+	}
+
+	CArea::m_accuracy = tolerance;
+	curve.FitArcs();
+
+	std::list<Span> spans;
+	curve.GetSpans(spans);
+	for (std::list<Span>::iterator It = spans.begin(); It != spans.end(); It++)
+	{
+		Span &span = *It;
+		if (span.m_v.m_type == 0)
+		{
+			new_spans.push_back(new HLine(gp_Pnt(span.m_p.x, span.m_p.y, 0.0), gp_Pnt(span.m_v.m_p.x, span.m_v.m_p.y, 0.0), &theApp.current_color));
+		}
+		else
+		{
+			gp_Pnt p0(span.m_p.x, span.m_p.y, 0.0);
+			gp_Pnt p1(span.m_v.m_p.x, span.m_v.m_p.y, 0.0);
+#if 1
+			gp_Dir up(0, 0, 1);
+			if (span.m_v.m_type < 0)up = -up;
+			gp_Pnt pc(span.m_v.m_c.x, span.m_v.m_c.y, 0.0);
+			gp_Circ circle(gp_Ax2(pc, up), p1.Distance(pc));
+			new_spans.push_back(new HArc(p0, p1, circle, &theApp.current_color));
+#else
+			// split arc into two fro visualisation of end point problem
+			Point mid_point = span.MidParam(0.5);
+			gp_Pnt mid_p(mid_point.x, mid_point.y, 0.0);
+			new_spans.push_back(new HLine(p0, mid_p, &theApp.current_color));
+			new_spans.push_back(new HLine(mid_p, p1, &theApp.current_color));
+#endif
+		}
+	}
 }
 
 void HSpline::ToBiarcs(std::list<HeeksObj*> &new_spans, double tolerance)const

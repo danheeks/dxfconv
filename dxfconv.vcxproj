@@ -104,11 +104,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Arc.h" />
+    <ClInclude Include="Area.h" />
+    <ClInclude Include="AreaOrderer.h" />
     <ClInclude Include="Box.h" />
+    <ClInclude Include="Box2D.h" />
+    <ClInclude Include="Circle.h" />
+    <ClInclude Include="clipper.hpp" />
+    <ClInclude Include="Curve.h" />
     <ClInclude Include="dxf.h" />
     <ClInclude Include="EndedObject.h" />
     <ClInclude Include="ExtrudedObj.h" />
     <ClInclude Include="Geom.h" />
+    <ClInclude Include="geometry.h" />
     <ClInclude Include="HArc.h" />
     <ClInclude Include="HCircle.h" />
     <ClInclude Include="HDxf.h" />
@@ -123,6 +131,7 @@
     <ClInclude Include="IdNamedObj.h" />
     <ClInclude Include="IdNamedObjList.h" />
     <ClInclude Include="ObjList.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="Sketch.h" />
     <ClInclude Include="SketchOrder.h" />
     <ClInclude Include="stdafx.h" />
@@ -131,10 +140,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Arc.cpp" />
+    <ClCompile Include="Area.cpp" />
+    <ClCompile Include="AreaClipper.cpp" />
+    <ClCompile Include="AreaOrderer.cpp" />
+    <ClCompile Include="Circle.cpp" />
+    <ClCompile Include="clipper.cpp" />
+    <ClCompile Include="Construction.cpp" />
+    <ClCompile Include="Curve.cpp" />
     <ClCompile Include="dxf.cpp" />
     <ClCompile Include="dxfconv.cpp" />
     <ClCompile Include="EndedObject.cpp" />
     <ClCompile Include="ExtrudedObj.cpp" />
+    <ClCompile Include="Finite.cpp" />
     <ClCompile Include="Geom.cpp" />
     <ClCompile Include="HArc.cpp" />
     <ClCompile Include="HCircle.cpp" />
@@ -149,7 +167,9 @@
     <ClCompile Include="HText.cpp" />
     <ClCompile Include="IdNamedObj.cpp" />
     <ClCompile Include="IdNamedObjList.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="ObjList.cpp" />
+    <ClCompile Include="Offset.cpp" />
     <ClCompile Include="Sketch.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="strconv.cpp" />
