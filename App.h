@@ -9,6 +9,7 @@ public:
 	double m_geom_tol;
 	double m_sketch_reorder_tol;
 	HeeksColor current_color;
+	unsigned int m_number_of_splines_converted;
 
 	CApp();
 

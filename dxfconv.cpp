@@ -29,7 +29,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	DoConvert(input_filepath.c_str(), output_filepath.c_str());
 
-	return 0;
+	if(theApp.m_number_of_splines_converted > 0)return 0; // 0 means "all good and some splines converted"
+	return 1; // non zero means either a problem or no splines converted
 }
 
 

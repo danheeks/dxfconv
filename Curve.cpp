@@ -127,12 +127,14 @@ bool CCurve::CheckForArc(const CVertex& prev_vt, std::list<const CVertex*>& migh
 	CircleOrLine c(p0, p1, p2);
 
 	const CVertex* current_vt = &prev_vt;
-	double accuracy = CArea::m_accuracy * 1.4 / CArea::m_units;
+
+	double accuracy = CArea::m_accuracy * 1.4 / CArea::m_units * 0.1;
 	for(std::list<const CVertex*>::iterator It = might_be_an_arc.begin(); It != might_be_an_arc.end(); It++)
 	{
 		const CVertex* vt = *It;
-
-		if(!c.LineIsOn(current_vt->m_p, vt->m_p, accuracy))
+		if (!c.PointIsOn(vt->m_p, CArea::m_accuracy / CArea::m_units * 0.1))
+			return false;
+		if (!c.LineIsOn(current_vt->m_p, vt->m_p, CArea::m_accuracy * 2.0 / CArea::m_units))
 			return false;
 		current_vt = vt;
 	}
@@ -362,8 +364,8 @@ void CCurve::UnFitArcs()
 
 				if (Segments < 1)
 					Segments=1;
-				if (Segments > 100)
-					Segments=100;
+				if (Segments > 5000)
+					Segments=5000;
 
 				dphi=phit/(Segments);
 

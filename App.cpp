@@ -17,6 +17,7 @@ CApp::CApp() :ObjList()
 	m_geom_tol = 0.000001;
 	m_sketch_reorder_tol = 0.01;
 	current_color = HeeksColor(0, 0, 0);
+	m_number_of_splines_converted = 0;
 }
 
 static bool segment_started = false;
@@ -185,6 +186,7 @@ static void SplinesToBiarcs(ObjList* objlist)
 		{
 			std::list<HeeksObj*> new_spans;
 			((HSpline*)object)->ToBiarcs(new_spans, tolerance_for_SplinesToBiarcs);
+			theApp.m_number_of_splines_converted++;
 			for (std::list<HeeksObj*>::iterator ItS = new_spans.begin(); ItS != new_spans.end(); ItS++)
 			{
 				new_objects.push_back(*ItS);
