@@ -185,7 +185,7 @@ void CDxfWrite::WriteEllipse(const double* c, double major_radius, double minor_
 	WriteExtrusion(thickness, extru);
 }
 
-CDxfRead::CDxfRead(const char* filepath)
+CDxfRead::CDxfRead(const char* filepath, void(*percent_callback)(int))
 {
 	// start the file
 	memset( m_unused_line, '\0', sizeof(m_unused_line) );
@@ -195,9 +195,28 @@ CDxfRead::CDxfRead(const char* filepath)
 	m_measurement_inch = false;
 	strcpy(m_layer_name, "0");	// Default layer name
 	m_ignore_errors = true;
-#ifdef STORE_LINE_NUMBERS
 	m_line_number = 0;
-#endif
+	m_number_of_lines = 0;
+	m_current_percent = -1;
+	m_percent_callback = percent_callback;
+
+	// count the number of lines
+	{
+		m_number_of_lines = 0;
+		m_ifs = new ifstream(filepath);
+		if (!(*m_ifs)){
+			m_fail = true;
+			printf("DXF file didn't load\n");
+			return;
+		}
+		char str[1024];
+		while (m_ifs->getline(str, 1024))
+			m_number_of_lines++;
+		m_ifs->clear();
+		m_ifs->seekg(0);
+		printf("number of lines = %d\n", m_number_of_lines);
+	}
+
 	m_ifs = new ifstream(filepath);
 	if(!(*m_ifs)){
 		m_fail = true;
@@ -2200,9 +2219,17 @@ void CDxfRead::get_line()
 	str[j] = 0;
 	strcpy(m_str, str);
 
-#ifdef STORE_LINE_NUMBERS
 	m_line_number++;
-#endif
+
+	if ((int)((double)m_line_number * 100 / m_number_of_lines) > m_current_percent)
+	{
+		m_current_percent++;
+		// write current percent
+		if (m_percent_callback)
+		{
+			(*m_percent_callback)(m_current_percent);
+		}
+	}
 }
 
 void CDxfRead::put_line(const char *value)

@@ -39,7 +39,7 @@ class HeeksDxfRead : public CDxfRead{
 		HeeksColor *ActiveColorPtr(Aci_t & aci);
 
 public:
-	HeeksDxfRead(const wchar_t* filepath);
+	HeeksDxfRead(const wchar_t* filepath, void(*percent_callback)(int) = NULL);
 
 		static bool m_make_as_sketch;
 		static bool m_ignore_errors;

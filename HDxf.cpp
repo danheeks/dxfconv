@@ -21,7 +21,7 @@ bool HeeksDxfRead::m_read_points = false;
 std::wstring HeeksDxfRead::m_layer_name_suffixes_to_discard = _T("_DOT,_DOTSMALL,_DOTBLANK,_OBLIQUE,_CLOSEDBLANK");
 bool HeeksDxfRead::m_add_uninstanced_blocks = false;
 
-HeeksDxfRead::HeeksDxfRead(const wchar_t* filepath) : CDxfRead(ws2s(filepath).c_str())
+HeeksDxfRead::HeeksDxfRead(const wchar_t* filepath, void(*percent_callback)(int)) : CDxfRead(ws2s(filepath).c_str(), percent_callback)
 {
 	m_current_block = NULL;
 	extract(gp_Trsf(), m_ucs_matrix);

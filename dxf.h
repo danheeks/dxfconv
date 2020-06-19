@@ -92,8 +92,6 @@ public:
 	void WriteCircle(const double* c, double radius, const char* layer_name, double thickness, const double* extru = NULL);
 };
 
-#define STORE_LINE_NUMBERS
-
 class CPolyLinePoint
 {
 public:
@@ -119,9 +117,9 @@ private:
 	char m_layer_name[1024];
 	char m_section_name[1024];
 	bool m_ignore_errors;
-#ifdef STORE_LINE_NUMBERS
 	long m_line_number;
-#endif
+	long m_number_of_lines;
+	int m_current_percent;
 
 	typedef std::map< std::string,Aci_t > LayerAciMap_t;
 	LayerAciMap_t m_layer_aci;  // layer names -> layer color aci map
@@ -165,9 +163,10 @@ protected:
 	Aci_t m_aci; // manifest color name or 256 for layer color
 	double m_extrusion_vector[3];
 	double m_thickness;
+	void(*m_percent_callback)(int);
 
 public:
-	CDxfRead(const char* filepath); // this opens the file
+	CDxfRead(const char* filepath, void(*percent_callback)(int) = NULL); // this opens the file
 	~CDxfRead(); // this closes the file
 
 	bool Failed(){return m_fail;}
